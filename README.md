@@ -1,6 +1,9 @@
 # Siren-App-API
 
-This web API allows the Siren application to communicate with our serverside services such as adding buying posts, deleting posts, and much more. Here is a quick rundown of the API endpoint functionalities:
+This web API allows the Siren application to communicate with our serverside services such as adding buying posts, deleting posts, and much more. There are two main branches that hold different features. The first branch: feature-00 holds the .yaml file to outline much of our API structures while feature-01 implements these endpoints along with the JSON and BSON. 
+
+
+Here is a quick rundown of the API endpoint functionalities:
 
 
   			Findr App: API Services and Endpoints
@@ -44,7 +47,6 @@ This web API allows the Siren application to communicate with our serverside ser
 			 		wishList: [ items ]
 			 		sellList: [ items ]
 			    }
-
 			3. {POST} HOST/api/users/items?uid={userID}
 				Create a new selling or buying item and adds it to the user's appropriate 
 				item list.
