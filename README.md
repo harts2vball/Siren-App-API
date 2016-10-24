@@ -3,8 +3,9 @@
 This web API allows the Siren application to communicate with our serverside services such as adding buying posts, deleting posts, and much more. Here is a quick rundown of the API endpoint functionalities:
 
 
-  Findr App: API Services and Endpoints
+  			Findr App: API Services and Endpoints
 			------------------------------------------------------------------------
+			
 			1. {POST} HOST/api/users
 				This sends a POST request which creates a new user object and stores it in
 				the MongoDB server. The body of the request should be urlencoded format.
