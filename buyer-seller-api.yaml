@@ -1,0 +1,245 @@
+# Example YAML to get you started quickly.
+# Be aware that YAML has indentation based scoping.
+# Code completion support is available so start typing for available options.
+swagger: '2.0'
+
+# This is your document metadata
+info:
+  version: "0.0.0"
+  title: BuyerSellerApi
+
+# Describe your paths here
+paths:
+  # This is a path endpoint. Change it.
+  /users/{userID}:
+    # This is a HTTP operation
+    get:
+      # Describe this verb here. Note: you can use markdown
+      description: |
+        Gets `Person` objects.
+        Optional query param of **size** determines
+        size of returned array
+      # This is array of GET operation parameters:
+      parameters:
+        # An example parameter that is in query and is required
+        -
+          name: userID
+          in: path
+          description: Unique userID of user
+          required: true
+          type: number
+          format: double
+      # Expected responses for this operation:
+      responses:
+        # Response code
+        '200':
+          description: Successful response returns a User
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+            $ref: '#/definitions/User'
+        '401': 
+          description: UNAUTHORIZED ACCESS
+          schema:
+            $ref: '#/definitions/ErrorModel'
+    post:
+      description: |
+        Add a user's profile to the database
+      parameters:
+        -
+          name: userID
+          in: path
+          description: Unique id of user
+          required: true
+          type: number
+          format: double
+        - 
+          name: postRequest
+          in: body
+          description: Info needed to create the user's new profile
+          schema:
+            $ref: '#/definitions/UserRequestWrapper'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/User'
+        '401':
+          description: UNAUTHORIZED ACCESS
+          schema:
+            $ref: '#/definitions/ErrorModel'
+  /users/{userID}/items:
+    get:
+      description: |
+        Gets the list of recommended items to buy or sell for the particular item 
+        on the user's wishlist
+      parameters:
+        -
+          name: userID
+          in: path
+          description: user's unique user ID
+          required: true
+          type: number
+          format: double
+        -
+          name: itemID
+          in: query
+          description: item's unique number
+          required: true
+          type: number
+          format: long
+        -
+          name: buying
+          in: query
+          description: whether the item is being bought or sold buy the user
+          type: boolean
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/MatchedItems'
+        '400':
+          description: Invalid query parameter
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '401':
+          description: UNAUTHORIZED ACCESS
+          schema:
+            $ref: '#/definitions/ErrorModel'
+    post:
+      description: |
+        Adds an item to the user's wishlist or selling list
+      parameters:
+        - 
+          name: userID
+          in: path
+          description: user's unique id number
+          required: true
+          type: number
+          format: double
+        -
+          name: itemWrapper
+          in: body
+          schema:
+            $ref: '#/definitions/ItemRequestWrapper'
+        -
+          name: buying
+          in: query
+          description: whether the item is being bought or being sold
+          type: boolean
+      responses:
+        '400':
+          description: Invalid query parameter
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '401':
+          description: UNAUTHORIZED ACCESS
+          schema:
+            $ref: '#/definitions/ErrorModel'
+    delete:
+      description: |
+        Deletes an item on the user's wishlist
+      parameters:
+        - 
+          name: userID
+          in: path
+          description: user's unique id number
+          required: true
+          type: number
+          format: double
+        -
+          name: itemID
+          in: query
+          required: true
+          type: number
+          format: long
+      responses:
+        '204':
+          description: Item to be deleted is not on wishlist
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '401':
+          description: UNAUTHORIZED ACCESS
+          schema:
+            $ref: '#/definitions/ErrorModel'
+definitions:
+  MatchedItems:
+    type: object
+    properties:
+      itemList:
+        type: array
+        items:
+          $ref: '#/definitions/Item'
+  ErrorModel:
+    type: object
+    properties:
+      responseCode:
+        type: integer
+        description: Error Response Code
+      responseDesc:
+        type: string
+        description: Error Response Message
+      field:
+        type: string
+        description: field that has error
+  ItemRequestWrapper:
+    type: object
+    properties:
+      itemDesc:
+        type: string
+        description: description of the item
+      id: 
+        type: number
+        format: long
+        description: item id created as item is created
+      priceLimit:
+        type: number
+        description: the upper or lower limit based on selling or buying
+      location:
+        type: string
+        description: location taken by iPhone 
+  User:
+    type: object
+    properties:
+      id:
+        type: number
+        format: long
+      firstName:
+        type: string
+      lastName:
+        type: string
+      faceBookUrl:
+        type: string
+      WishList:
+        type: array
+        items:
+          $ref: '#/definitions/Item'
+      SellList:
+        type: array
+        items:
+          $ref: '#/definitions/Item'
+  UserRequestWrapper:
+    type: object
+    properties:
+      firstName: 
+        type: string
+      lastName: 
+        type: string
+      facebookUrl:  
+        type: string
+  Item:
+    type: object
+    properties:
+      id:
+        type: number
+        format: long
+      searchTerms:  
+        type: array
+        items:
+          type: string
+      location:
+        type: string
+      endDate:
+        type: string
+      buying:
+        type: boolean
